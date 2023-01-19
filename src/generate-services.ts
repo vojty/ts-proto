@@ -72,7 +72,7 @@ export function generateService(
       params.push(code`metadata?: grpc.Metadata`);
     } else if (options.addGrpcMetadata) {
       const Metadata = imp("Metadata@@grpc/grpc-js");
-      params.push(code`metadata?: ${Metadata}`);
+      params.push(code`metadata: ${Metadata}`);
     } else if (options.metadataType) {
       const Metadata = imp(options.metadataType);
       params.push(code`metadata?: ${Metadata}`);
@@ -113,7 +113,7 @@ function generateRegularRpcMethod(ctx: Context, methodDesc: MethodDescriptorProt
   const params = [
     ...(options.context ? [code`ctx: Context`] : []),
     code`request: ${inputType}`,
-    ...(options.addGrpcMetadata ? [code`metadata?: Metadata`] : []),
+    ...(options.addGrpcMetadata ? [code`metadata: Metadata`] : []),
     ...(options.useAbortSignal ? [code`abortSignal?: AbortSignal`] : []),
   ];
   const maybeCtx = options.context ? "ctx," : "";
@@ -334,7 +334,7 @@ export function generateRpcType(ctx: Context, hasStreamingMethods: boolean): Cod
   const { options } = ctx;
   const maybeContext = options.context ? "<Context>" : "";
   const maybeContextParam = options.context ? "ctx: Context," : "";
-  const maybeMetadataParam = options.addGrpcMetadata ? `metadata?: Metadata,` : "";
+  const maybeMetadataParam = options.addGrpcMetadata ? `metadata: Metadata,` : "";
   const maybeAbortSignalParam = options.useAbortSignal ? "abortSignal?: AbortSignal," : "";
   const methods = [[code`request`, code`Uint8Array`, code`Promise<Uint8Array>`]];
   if (hasStreamingMethods) {
